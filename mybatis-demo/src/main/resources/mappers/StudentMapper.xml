@@ -38,7 +38,12 @@
     DELETE FROM students WHERE sid = #{sid}
   </delete>
 
-  <!-- Optional dynamic multi-condition query -->
+  <!-- Task 2: Query table attributes (schema) -->
+  <select id="describeStudents" resultType="java.util.LinkedHashMap">
+    DESCRIBE students
+  </select>
+
+  <!-- Task 3 (Optional): Dynamic multi-condition query -->
   <select id="selectByConditions" parameterType="map" resultMap="StudentResult">
     SELECT sid, sname, sgender, smajor, sbirthday, scredit_points
     FROM students

@@ -13,4 +13,7 @@ public interface StudentMapper {
 
     // Optional dynamic multi-condition query
     List<Student> selectByConditions(Map<String, Object> params);
+
+    // Task 2: Query table attributes (schema)
+    List<Map<String, Object>> describeStudents();
 }

@@ -9,11 +9,9 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.InputStream;
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class DemoMain {
+public class Task1 {
     public static void main(String[] args) throws Exception {
         String resource = "mybatis-config.xml";
         try (InputStream inputStream = Resources.getResourceAsStream(resource)) {
@@ -21,7 +19,8 @@ public class DemoMain {
             try (SqlSession session = sqlSessionFactory.openSession(true)) {
                 StudentMapper mapper = session.getMapper(StudentMapper.class);
 
-                // ====== Task 1: CRUD operations ======
+                System.out.println("--- Task 1: CRUD Operations ---");
+
                 System.out.println("-- Select all students --");
                 List<Student> all = mapper.selectAll();
                 all.forEach(System.out::println);
@@ -40,22 +39,10 @@ public class DemoMain {
                 Student s = mapper.selectById(newStudent.getSid());
                 System.out.println(s);
 
-                // ====== Task 3 (Optional): Dynamic SQL multi-condition query ======
-                System.out.println("-- Dynamic multi-condition query (name fuzzy, credit range) --");
-                Map<String, Object> params = new HashMap<>();
-                params.put("name", "Demo");
-                params.put("minCredits", 3.0);
-                params.put("maxCredits", 4.0);
-                params.put("limit", 10);
-                params.put("offset", 0);
-
-                List<Student> filtered = mapper.selectByConditions(params);
-                filtered.forEach(System.out::println);
-
                 System.out.println("-- Delete the demo student --");
                 mapper.deleteById(newStudent.getSid());
 
-                System.out.println("Done.");
+                System.out.println("Task 1 done.");
             }
         }
     }
