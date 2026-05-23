@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.StudentMapper">
+
+  <resultMap id="StudentResult" type="com.example.pojo.Student">
+    <id property="sid" column="sid" />
+    <result property="sname" column="sname" />
+    <result property="sgender" column="sgender" />
+    <result property="smajor" column="smajor" />
+    <result property="sbirthday" column="sbirthday" />
+    <result property="screditPoints" column="scredit_points" />
+  </resultMap>
+
+  <select id="selectAll" resultMap="StudentResult">
+    SELECT sid, sname, sgender, smajor, sbirthday, scredit_points
+    FROM students
+  </select>
+
+  <select id="selectById" parameterType="int" resultMap="StudentResult">
+    SELECT sid, sname, sgender, smajor, sbirthday, scredit_points
+    FROM students WHERE sid = #{sid}
+  </select>
+
+  <insert id="insertStudent" parameterType="com.example.pojo.Student" useGeneratedKeys="true" keyProperty="sid">
+    INSERT INTO students (sname, sgender, smajor, sbirthday, scredit_points)
+    VALUES (#{sname}, #{sgender}, #{smajor}, #{sbirthday}, #{screditPoints})
+  </insert>
+
+  <update id="updateStudent" parameterType="com.example.pojo.Student">
+    UPDATE students
+    SET sname = #{sname}, sgender = #{sgender}, smajor = #{smajor}, sbirthday = #{sbirthday}, scredit_points = #{screditPoints}
+    WHERE sid = #{sid}
+  </update>
+
+  <delete id="deleteById" parameterType="int">
+    DELETE FROM students WHERE sid = #{sid}
+  </delete>
+
+  <!-- Optional dynamic multi-condition query -->
+  <select id="selectByConditions" parameterType="map" resultMap="StudentResult">
+    SELECT sid, sname, sgender, smajor, sbirthday, scredit_points
+    FROM students
+    <where>
+      <if test="name != null and name != ''">
+        AND sname LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="major != null and major != ''">
+        AND smajor = #{major}
+      </if>
+      <if test="minCredits != null">
+        AND scredit_points &gt;= #{minCredits}
+      </if>
+      <if test="maxCredits != null">
+        AND scredit_points &lt;= #{maxCredits}
+      </if>
+    </where>
+    <if test="offset != null and limit != null">
+      LIMIT #{limit} OFFSET #{offset}
+    </if>
+  </select>
+
+</mapper>
